@@ -4,6 +4,7 @@ from itertools import count
 class StudentsGrades:
     def __init__(self, scores):
         self.scores = scores
+        self._sorted_scores = None
 
     def get_by_index(self, index):
         return self.scores[index]
@@ -57,15 +58,23 @@ class StudentsGrades:
 
     def __str__(self):
         return f"StudentsGrades: {self.count()} studentů, průměr {self.average():.1f}"
-results = StudentsGrades([85, 42, 91, 67, 50, 73, 100, 38, 58])
 
-print(results.count())  # 9
-print(results.get_by_index(2))  # 91
-print(results.scores)  # [85, 42, 91, 67, 50, 73, 100, 38, 58]
-print(results.get_grade(4))
-print(results.find(67))
-print(results.get_sorted())   # [38, 42, 50, 58, 67, 73, 85, 91, 100]
-print(results.scores)         # [85, 42, 91, 67, 50, 73, 100, 38, 58]  ← beze změny
-print(results.average())
-print(results.pass_rate())
-print(results)
+    def find_sorted(self, score):
+        if self._sorted_scores is None:
+            self._sorted_scores = self.get_sorted()
+        k = self._sorted_scores
+        start = 0
+        end = len(k) - 1
+        print("Sorting...")
+        while start <= end:
+            stred = (start + end) / 2
+            if k[round(stred)] == score:
+                print("Sorted")
+                return round(stred), score
+            elif k[round(stred)] < score:
+                start = stred + 1
+            elif k[round(stred)] > score:
+                end = stred - 1
+        print("None")
+        return None
+
